@@ -1,0 +1,47 @@
+
+
+
+# commands
+
+casper-client put-deploy --chain-name casper-net-1 \
+--node-address http://$CASPER_PEER:$CASPER_PEER_PORT \
+-k $CASPER_PRIVATE \
+--session-path ~/projects/nftmarketplace/contract/target/wasm32-unknown-unknown/release/contract.wasm \
+--payment-amount 10000000 \
+--session-arg \
+"name:string='nftmplce'" \
+"symbol:string='CNFT'" \
+"contract_name:string='nftmrketplacev0_0_1'" \
+"meta:meta=''"
+
+casper-client put-deploy --chain-name casper-net-1 \
+-k $CASPER_PRIVATE \
+--node-address http://$CASPER_PEER:$CASPER_PEER_PORT \
+--session-hash hash-22Ad0A83738601DD123187Be20A1560Bc893F6eF93b107ae0Abb0AED31404aa5 \
+--session-entry-point owner_of \
+--payment-amount 1000 \
+--session-arg \
+"token_id:string='1'"
+
+
+
+
+
+
+# deploys
+
+
+contract deployment tx hash:
+F7Ae7a8484D6BBB701D23b9D65Dd3830215810fe4Da91AcDf93052b9cBdD7337
+
+
+contract hash:
+hash-F07A8Ac158952854c02A1648C4c9c0A5F696B8ce58C1A2E79c946B743208CB24
+
+Prev: hash-22Ad0A83738601DD123187Be20A1560Bc893F6eF93b107ae0Abb0AED31404aa5
+
+
+contract package-hash:
+hash-69e7aD87Be061b1dD044a71404090cDbCD42aE456Cc3f7Db48ca983aA071D229
+
+Prev: hash-890Fa61543D14caa6665d1e8cD50639d10F37Af301A81D3FB95Fe91b9b004549
