@@ -1,0 +1,28 @@
+{
+  "name": "nftmarketplace",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "setup": "npm install --prefix ./frontend && npm install --prefix ./cors-server && npm install --prefix ./deploy-scripts",
+    "server": "cd cors-server && npm start",
+    "frontend": "cd frontend && npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OmkarPh/nftmarketplace.git"
+  },
+  "keywords": [
+    "nft"
+  ],
+  "author": "Omkar Phansopkar <omkarphansopkar@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/OmkarPh/nftmarketplace/issues"
+  },
+  "homepage": "https://github.com/OmkarPh/nftmarketplace#readme"
+}
