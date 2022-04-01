@@ -10,6 +10,7 @@ export const CustomThemeContext = createContext({
   themeVariables: THEME_VARIABLES.DARK,
   setTheme: (theme: string) => {}
 });
+export const useCustomTheme = () => useContext(CustomThemeContext);
 
 const StyledThemeConsumer = (props: { children: ReactNode }) => {
   const { theme } = useContext(CustomThemeContext);

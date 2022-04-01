@@ -69,5 +69,5 @@ const installContract = async () => {
   console.log(`... Contract Hash: ${contractHash}`);
 };
 
-console.log("Commented fn call to prevent mistaken deployments");
+// console.log("Commented fn call to prevent mistaken deployments");
 installContract();

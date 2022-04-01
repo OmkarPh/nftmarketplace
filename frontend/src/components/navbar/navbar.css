@@ -1,0 +1,4 @@
+.navbarcontainer {
+  background-color: var(--background) !important;
+  color: var(--textColor);
+}

@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { Signer } from "casper-js-sdk";
+import { logSeparator } from "../utils/log";
 
 
 interface IEntityInfo {
@@ -113,6 +114,14 @@ const AuthProvider = (props: any) => {
     login,
     logout,
   };
+
+  useEffect(() => {
+    console.log(
+      "\n\nAuth details changed\n", 
+      { isLoggedIn: loggedIn, pubKey: entityInfo.publicKey },
+      "\n\n\n"
+    );
+  }, [loggedIn, entityInfo])
 
   return <AuthContext.Provider value={contextValue} {...props} />;
 };

@@ -8,6 +8,7 @@
   },
   "scripts": {
     "install-contract": "ts-node ./install.ts",
+    "mint-nft1": "ts-node ./deployInitNFTs.ts",
     "view-contract": "ts-node ./getDeployDetails.ts"
   },
   "keywords": [],

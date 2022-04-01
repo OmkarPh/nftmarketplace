@@ -11,10 +11,13 @@ import { logSeparator } from './utils/log';
 import { isContractIHashSetup } from './lib/cep47';
 import { getNFTsOwned, numberOfNFTsOwned } from './api/userInfo';
 
-import 'antd/dist/antd.css';
-import './App.css';
 import Mint from './pages/mint';
 import { AuthProvider } from './contexts/AuthContext';
+import Navbar from './components/navbar';
+
+import './App.css';
+import './colors.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   async function fetchInitDetails(){
@@ -49,6 +52,7 @@ function App() {
       <AuthProvider>
         <ThemeProvider>
             <BrowserRouter>
+              <Navbar />
               <Switch>
                 <Route exact path="/" component={Home} />
                 <Route exact path="/mint" component={Mint} />

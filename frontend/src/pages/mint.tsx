@@ -1,10 +1,10 @@
 import { Button } from "antd"
 import { useEffect } from "react"
+import MintForm from "../components/mint/MintForm";
 import { useAuth } from "../contexts/AuthContext";
 
 const Mint = () => {
-  const { isLoggedIn, entityInfo, login, logout } = useAuth();
-  console.log({ isLoggedIn, pubKey: entityInfo.publicKey });
+  const { isLoggedIn, entityInfo, login } = useAuth();
   
   useEffect(() => {
     
@@ -24,15 +24,7 @@ const Mint = () => {
       </h2>
       {
         isLoggedIn ?
-        <div>
-          Connected !!
-          <br/>
-          User pub key: { entityInfo.publicKey }
-          <br/><br/><br/><br/>
-          <Button onClick={logout}>
-            Disconnect
-          </Button>
-        </div> :
+        <MintForm /> :
         <Button onClick={login}>
           Connect
         </Button>

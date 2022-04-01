@@ -16,17 +16,16 @@ const USER_KEYS = Keys.Ed25519.parseKeyFiles(
   `${USER_KEY_PAIR_PATH}/public_key.pem`,
   `${USER_KEY_PAIR_PATH}/secret_key.pem`
 );
-console.log(USER_KEYS.publicKey.toAccountHash());
-console.log(USER_KEYS.publicKey.toHex());
-console.log(USER_KEYS.publicKey.toAccountHashStr());
-  
 
+console.log("User key:");
+console.log("Pub key to hex: ", USER_KEYS.publicKey.toHex());
+console.log("Pub key to acc hash string: ", USER_KEYS.publicKey.toAccountHashStr());
 
 const fetchDetails = async () => {
   let accountInfo = await getAccountInfo(NODE_ADDRESS!, KEYS.publicKey);
 
-  // console.log(`... Account Info: `);
-  // console.log(JSON.stringify(accountInfo, null, 2));
+  console.log(`... Account Info: `);
+  console.log(JSON.stringify(accountInfo, null, 2));
 
   const contractHash = await getAccountNamedKeyValue(
     accountInfo,
