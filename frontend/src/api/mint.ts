@@ -1,9 +1,10 @@
 import { cep47 } from "../lib/cep47";
-import { CLPublicKey, Signer } from "casper-js-sdk";
+import { CLPublicKey } from "casper-js-sdk";
 import { PAYMENT_AMOUNTS } from "../constants/paymentAmounts";
 import { signDeploy } from "../utils/signer";
 import { CONNECTION } from "../constants/blockchain";
 import { getDeploy } from "../utils/contract-utils";
+import { numberOfNFTsOfPubCLvalue } from "./userInfo";
 
 
 export class NFTReference {
@@ -14,7 +15,7 @@ export class NFTReference {
     this.value = value;
   }
 }
-interface IMintOptions {
+export interface IMintOptions {
   url: string,
   title: string,
   about: string,
@@ -22,7 +23,7 @@ interface IMintOptions {
   references: NFTReference[]
 }
 export async function mint(publicKeyCLValue: CLPublicKey, mintOptions: IMintOptions){
-  const oldBalance = await cep47.balanceOf(publicKeyCLValue);
+  const oldBalance = await numberOfNFTsOfPubCLvalue(publicKeyCLValue);
   console.log('...... No. of NFTs in your account before mint: ', oldBalance);
   
   const metas = [new Map()];
@@ -45,13 +46,5 @@ export async function mint(publicKeyCLValue: CLPublicKey, mintOptions: IMintOpti
 
   const mintDeployHash = await signedMintDeploy.send(CONNECTION.NODE_ADDRESS);
   console.log("Deploy hash", mintDeployHash);
-  
-
-  const deployResult = await getDeploy(CONNECTION.NODE_ADDRESS, mintDeployHash);
-  console.log("...... Token minted successfully", deployResult);
-
-  const newBalance = await cep47.balanceOf(publicKeyCLValue);
-  console.log('...... No. of NFTs in your account: ', newBalance);
-
   return mintDeployHash;
 }

@@ -1,0 +1,43 @@
+.corebtn {
+  /* margin: 2px; */
+  /* background: var(--btncolor);
+  background-image: -webkit-linear-gradient(top, var(--btncolor), var(--btncolorEffect));
+  background-image: -moz-linear-gradient(top, var(--btncolor), var(--btncolorEffect));
+  background-image: -ms-linear-gradient(top, var(--btncolor), var(--btncolorEffect));
+  background-image: -o-linear-gradient(top, var(--btncolor), var(--btncolorEffect));
+  background-image: linear-gradient(to bottom, var(--btncolor), var(--btncolorEffect));
+  -webkit-border-radius: 7;
+  -moz-border-radius: 7;
+  border: 0;
+  border-radius: 7px;
+  color: #ffffff;
+  font-size: 20px;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none; */
+}
+
+.corebtn:hover {
+  /* opacity: 0.9; */
+  /* transition: 0.2s ease-in; */
+  /* filter: brightness(95%); */
+  /* background: var(--btncolorEffect);
+  background-image: -webkit-linear-gradient(top, var(--btncolorEffect), var(--btncolor));
+  background-image: -moz-linear-gradient(top, var(--btncolorEffect), var(--btncolor));
+  background-image: -ms-linear-gradient(top, var(--btncolorEffect), var(--btncolor));
+  background-image: -o-linear-gradient(top, var(--btncolorEffect), var(--btncolor));
+  background-image: linear-gradient(to bottom, var(--btncolorEffect), var(--btncolor)); */
+  /* text-decoration: none; */
+}
+
+.MuiOutlinedInput-notchedOutline{
+  border-color: var(--textColor);
+}
+.MuiFormHelperText-root {
+  color: var(--textColor) !important;
+}
+
+.Mui-disabled {
+  /* background-color: var(--btncolor) !important; */
+  color: var(--textColor) !important;
+  filter: brightness(70%);
+}

@@ -1,0 +1,93 @@
+.mintform {
+  border: 1px solid var(--textColor);
+}
+.previewimage {
+  min-width: 100px;
+  max-width: 90%;
+  height: auto;
+  display: block;
+}
+
+.inputThumbnail {
+  align-items: center;
+}
+.inputThumbnail video, .inputThumbnail button{
+  margin: auto;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.dropinput {
+  min-height: 350px;
+  max-height: 440px;
+  /* background: linear-gradient(0deg, #F5F5FF, #F5F5FF), #EEEEEE; */
+  border-radius: 8px;
+  height: 100%;
+  margin-top: 9px;
+  /* margin-bottom: 15px; */
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.dropinput .filesinput{ 
+  position:relative;
+  border: 2px dashed #E2E6EA;
+  border-radius: 8px;
+  width: 90%;
+}
+.dropinput input {
+  outline: 2px dashed #92b0b3;
+  outline-offset: -10px;
+  -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+  transition: outline-offset .15s ease-in-out, background-color .15s linear;
+  padding: 120px 0px 85px 35%;
+  text-align: center !important;
+  margin: 0;
+  width: 100% !important;
+  opacity: 0;
+}
+.dropinput .filesinput input:focus{     outline: 2px dashed #92b0b3;  outline-offset: -10px;
+  -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+  transition: outline-offset .15s ease-in-out, background-color .15s linear; border:1px solid #92b0b3;
+}
+/* .dropinput .filesinput:after {  
+  pointer-events: none;
+  position: absolute;
+  top: 35%;
+  left: 0;
+  width: 100%;
+  right: 0;
+  height: 50px;
+  content: "Click to browse or \A drag and drop your files \A\A Accepted files: images / videos ";
+  white-space: pre;
+  text-align: center;
+  color: #2ea591;
+  font-weight: 600;
+  display: block;
+  margin: 0 auto;
+  background-size: 100%;
+  background-repeat: no-repeat;
+} */
+.imgpreview {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.imgpreview img{
+  max-width: 90%;
+  height: auto;
+  max-height: 400px;
+}
+.dropinput .message {
+  position: absolute;
+  top: 20%;
+  margin: 0 auto;
+  margin-left: 5%;
+  width: 90%;
+  text-align: center;
+  color: #2ea591;
+  pointer-events: none;
+  font-weight: 600;
+  white-space: pre;
+}

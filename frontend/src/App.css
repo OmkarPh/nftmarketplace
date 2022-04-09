@@ -1,6 +1,13 @@
 .App {
-  text-align: center;
+  color: var(--textColor);
+  background-color: var(--backgroundWide);
+  background-image: linear-gradient(165deg, var(--backgroundGradientStart) 0%, var(--backgroundGradientEnd) 80%);
+  min-height: 100vh;
 }
+.App * {
+  color: var(--textColor);
+}
+
 
 .App-logo {
   height: 40vmin;

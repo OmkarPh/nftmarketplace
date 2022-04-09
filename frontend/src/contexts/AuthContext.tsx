@@ -1,7 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
 import { Signer } from "casper-js-sdk";
-import { logSeparator } from "../utils/log";
-
 
 interface IEntityInfo {
   publicKey: string | null,
@@ -11,6 +9,7 @@ interface IAuthContextValue {
   entityInfo: IEntityInfo,
   login: () => void,
   logout: () => void,
+  refreshAuth: () => void,
 }
 
 
@@ -49,43 +48,50 @@ const AuthContext = createContext<IAuthContextValue>({
   entityInfo: {publicKey: null},
   login: ()=>{},
   logout: ()=>{},
+  refreshAuth: ()=>{},
 });
 const AuthProvider = (props: any) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [entityInfo, setEntityInfo] = useState<IEntityInfo>({ publicKey: null });
 
+  function updateLoginStatus(isLoggedIn: boolean, pubKey: string | null){
+    setLoggedIn(isLoggedIn);
+    setEntityInfo({ publicKey: pubKey });
+  }
+  function refreshEntityInfo(){
+    if(loggedIn)
+      setEntityInfo({ publicKey: entityInfo.publicKey });
+    else
+      setEntityInfo({ publicKey: null });
+  }
+
   useEffect(() => {
     window.addEventListener('signer:locked', msg => {
       console.log("Signer locked");
-      setLoggedIn(false);
-      setEntityInfo({ publicKey: null });
+      updateLoginStatus(false, null);
     });
     window.addEventListener('signer:disconnected', msg => {
       console.log("Signer disconnected");
-      setLoggedIn(false);
-      setEntityInfo({ publicKey: null });
+      updateLoginStatus(false, null);
     });
     window.addEventListener('signer:connected', async (msg) => {
       console.log("Signer connected");
       const publicKey = await getActivePublicKey();
       if(publicKey){
-        setLoggedIn(true);
-        setEntityInfo({ publicKey });
+        updateLoginStatus(true, publicKey);
       }
     });
     window.addEventListener('signer:unlocked', async (msg) => {
       console.log("Signer unlocked");
       const publicKey = await getActivePublicKey();
       if(publicKey){
-        setLoggedIn(true);
-        setEntityInfo({ publicKey });
+        updateLoginStatus(true, publicKey);
       }
     });
     setTimeout(async () => {
       const publicKey = await getConnectionStatus();
       if(publicKey){
-        setLoggedIn(true);
-        setEntityInfo({ publicKey })
+        updateLoginStatus(true, publicKey);
       }
     }, 300);
   }, []);
@@ -113,6 +119,7 @@ const AuthProvider = (props: any) => {
     entityInfo,
     login,
     logout,
+    refreshAuth: refreshEntityInfo
   };
 
   useEffect(() => {

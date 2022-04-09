@@ -1,20 +1,9 @@
-import { Button } from "antd"
-import { useEffect } from "react"
+import CoreButton from "../components/core/CoreButton";
 import MintForm from "../components/mint/MintForm";
 import { useAuth } from "../contexts/AuthContext";
 
 const Mint = () => {
-  const { isLoggedIn, entityInfo, login } = useAuth();
-  
-  useEffect(() => {
-    
-    return () => {
-    }
-  }, []);
-
-  // function mintNFT(){
-
-  // }
+  const { isLoggedIn, login } = useAuth();
   
   return (
     <div>
@@ -25,11 +14,10 @@ const Mint = () => {
       {
         isLoggedIn ?
         <MintForm /> :
-        <Button onClick={login}>
+        <CoreButton onClick={login}>
           Connect
-        </Button>
+        </CoreButton>
       }
-      
     </div>
   )
 }

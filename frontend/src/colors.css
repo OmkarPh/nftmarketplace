@@ -4,4 +4,10 @@
   --textFocused: rgb(202, 202, 202);
   --background: #141313;
   --togglerColor: #434343;
+  --backgroundWide: #202225;
+  --backgroundGradientStart: #202225;
+  --backgroundGradientEnd: #151530;
+  --btncolor: #41A0FF;
+  --btncolorEffect: #3a9cff;
+  --primaryFocusBlue: #1c74d3;
 }
