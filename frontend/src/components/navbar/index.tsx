@@ -51,10 +51,8 @@ const ResponsiveAppBar = () => {
       title: "Profile"
     },
     {
-      title: "Account",
-    },
-    {
       title: "Dashboard",
+      link: "/dashboard"
     },
     {
       title: "Logout",

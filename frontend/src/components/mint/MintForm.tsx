@@ -16,6 +16,7 @@ import { generateUniqueID, isIdOccupied } from '../../api/nftInfo';
 import { getDeployDetails } from '../../api/universal';
 import { Dialog } from '@material-ui/core';
 import MintStepper, { MintingStages } from './mintSteps';
+import { useCustomTheme } from '../../contexts/ThemeContext';
 
 interface AccNFTData {
   numOfNFTs: number,
@@ -25,6 +26,7 @@ const MintForm = () => {
   const { entityInfo, logout, refreshAuth } = useAuth();
   const [accData, setAccData] = useState<AccNFTData | null>(null);
   const { enqueueSnackbar } = useSnackbar();
+  const { themeVariables } = useCustomTheme();
 
   const [validID, setValidID] = useState(false);
   const [uploadedImageURL, setUploadedImage] = useState<string | null>(null);
@@ -36,6 +38,7 @@ const MintForm = () => {
     directImgURL: false,
   });
   const [mintStage, setMintStage] = useState<MintingStages>(MintingStages.DEFAULT);
+  const [errStage, setErrStage] = useState<MintingStages>(MintingStages.DEFAULT);
 
   
   useEffect(()=>{
@@ -77,12 +80,14 @@ const MintForm = () => {
     setUploadedImage(URL.createObjectURL(event.target.files[0]));
   }
 
-
   async function mintNewNFT(){
     if(!uploadedImageURL){
       return enqueueSnackbar("Please upload image or enter direct URL", { 
         variant: 'error',
       });
+    }
+    if(!validID){
+      return enqueueSnackbar("Please enter an id that is not already occupied", {variant: 'error'});
     }
 
     if(entityInfo.publicKey){
@@ -90,24 +95,40 @@ const MintForm = () => {
 
       setMintStage(MintingStages.STARTED);
       
-      const mintDeployHash = await mint(
-        CLPublicKey.fromHex(entityInfo.publicKey),
-        {
-          id: mintInputs.id,
-          title: mintInputs.title,
-          about: mintInputs.about,
-          url: uploadedImageURL,
-          references: [
-            new NFTReference("my nft collection", "https://opensea.com/OmkarPh"),
-            new NFTReference("my gh", "https://github.com/OmkarPh"),
-          ]
+      let mintDeployHash;
+      try{
+        mintDeployHash = await mint(
+          CLPublicKey.fromHex(entityInfo.publicKey),
+          {
+            id: mintInputs.id,
+            title: mintInputs.title,
+            about: mintInputs.about,
+            url: uploadedImageURL,
+            references: [
+              new NFTReference("my nft collection", "https://opensea.com/OmkarPh"),
+              new NFTReference("my gh", "https://github.com/OmkarPh"),
+            ]
+          }
+        )
+      }catch(err: any){
+        console.log(err);
+        console.log(err.message)
+        console.log(err.message.includes('User Cancelled'));
+        
+        if(err.message.includes('User Cancelled')){
+          setErrStage(MintingStages.STARTED);
         }
-      );
+        return;
+      }
       
       setMintStage(MintingStages.TX_PENDING);
 
-      const deployResult = await getDeployDetails(mintDeployHash);
-      console.log("...... Token minted successfully", deployResult);
+      try{
+        const deployResult = await getDeployDetails(mintDeployHash);
+        console.log("...... Token minted successfully", deployResult);
+      }catch(err: any){
+        setErrStage(MintingStages.TX_PENDING);
+      }
       setMintStage(MintingStages.TX_SUCCESS);
       setMintInputs({
         about: "",
@@ -122,6 +143,15 @@ const MintForm = () => {
       console.log('...... No. of NFTs in your account: ', newBalance);
     }
   }
+
+  function closeDialog(){
+    if(mintStage === MintingStages.TX_SUCCESS || errStage !== MintingStages.DEFAULT){
+      setMintStage(MintingStages.DEFAULT);
+      setErrStage(MintingStages.DEFAULT);
+    }
+    
+  }
+
   return (
     <div>
       User pub key: { entityInfo.publicKey }
@@ -246,6 +276,7 @@ const MintForm = () => {
             Already hosted image, enter direct url ?
             <Checkbox
               checked={mintInputs.directImgURL}
+              sx={{ color: themeVariables.textColor }}
               onChange={e => changeDirectImageUrlSwitch(e.target.checked)}
               />
             <br/><br/>
@@ -287,12 +318,12 @@ const MintForm = () => {
 
       <Dialog
         open={mintStage !== MintingStages.DEFAULT}
-        onClose={()=>setMintStage(MintingStages.DEFAULT)}
+        onClose={closeDialog}
         fullWidth
         maxWidth='md'
         aria-labelledby="customized-dialog-title"
       >
-        <MintStepper currentStep={mintStage} errorStep={MintingStages.DEFAULT} />
+        <MintStepper currentStep={mintStage} errorStep={errStage} />
       </Dialog>
       <br/><br/><br/>
     </div>

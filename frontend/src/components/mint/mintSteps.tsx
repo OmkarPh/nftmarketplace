@@ -21,7 +21,7 @@ const MintStagesInfo: {
     title: "Tx prepared",
     processTitle: "Preparing tx ",
     description: "",
-    err: "Some error creating or signing tx"
+    err: "Some error signing tx, Did you accidentally cancel it?"
   },
   {
     stage: MintingStages.TX_PENDING,
@@ -49,42 +49,42 @@ const MintStepper = (props: IMintStepperProps) => {
     <Box sx={{ width: '100%', padding: "30px" }}>
       <Stepper activeStep={props.currentStep} alternativeLabel>
         {
-          MintStagesInfo.map((mintStage, currIdx) => {
-
+          MintStagesInfo.map((currStage, currIdx) => {
             const labelProps: {
               optional?: React.ReactNode;
               error?: boolean;
             } = {};
             
-            if(MintStagesInfo.findIndex(stage => stage.stage === props.currentStep) >= currIdx)
+            console.log("err step", currStage.stage, props.errorStep);
+            if(
+              props.errorStep !== currStage.stage &&
+              MintStagesInfo.findIndex(stage => stage.stage === props.currentStep) >= currIdx
+            ){
               labelProps.optional = (
                 <Typography
                   variant="caption"
                   color="textSecondary"
                   style={{ display: "inline-block", width: "100%" }}
                   align='center'>
-                  { mintStage.description }
+                  { currStage.description }
                 </Typography>
               )
+            }
 
-            // if (isStepFailed(index)) {
-            //   labelProps.optional = (
-            //     <Typography variant="caption" color="error">
-            //       Alert message
-            //     </Typography>
-            //   );
-            //   labelProps.error = true;
-            // }
-            console.log(mintStage.stage);
+            console.log(currStage.stage);
             
             return (
-              <Step key={mintStage.stage}>
+              <Step key={currStage.stage}>
                 <StepLabel {...labelProps}>
                   {
-                    mintStage.stage <= props.currentStep ?
-                    <> { mintStage.title } </> : 
+                    props.errorStep === currStage.stage ?
+                    <Typography color="error">
+                      { currStage.err }
+                    </Typography>
+                    : currStage.stage <= props.currentStep ?
+                    <> { currStage.title } </> : 
                     <> 
-                      { mintStage.processTitle } &nbsp;
+                      { currStage.processTitle } &nbsp;
                       <i className="fa fa-solid fa-spinner fa-spin"></i>
                     </>
                   }

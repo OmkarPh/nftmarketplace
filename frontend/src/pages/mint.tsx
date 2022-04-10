@@ -1,23 +1,19 @@
-import CoreButton from "../components/core/CoreButton";
+import PromptLogin from "../components/core/PromptLogin";
 import MintForm from "../components/mint/MintForm";
 import { useAuth } from "../contexts/AuthContext";
 
 const Mint = () => {
-  const { isLoggedIn, login } = useAuth();
+  const { isLoggedIn } = useAuth();
   
+  if(!isLoggedIn)
+    return <PromptLogin />
   return (
-    <div>
+    <div className="px-3">
       <br/>
       <h2>
         Mint
       </h2>
-      {
-        isLoggedIn ?
-        <MintForm /> :
-        <CoreButton onClick={login}>
-          Connect
-        </CoreButton>
-      }
+      <MintForm />
     </div>
   )
 }

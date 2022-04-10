@@ -27,3 +27,9 @@ export async function generateUniqueID(): Promise<number>{
   console.log(await isIdOccupied(String(randID)));
   return randID;
 }
+
+export async function getNFTDetails(tokenID: string){
+  const nft1_metadata = await cep47.getTokenMeta(tokenID);
+  // console.log(`NFT ${tokenID} metadata: `, nft1_metadata);
+  return nft1_metadata;
+}

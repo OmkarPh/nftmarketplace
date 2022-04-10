@@ -3,7 +3,6 @@ import { CLPublicKey } from "casper-js-sdk";
 import { PAYMENT_AMOUNTS } from "../constants/paymentAmounts";
 import { signDeploy } from "../utils/signer";
 import { CONNECTION } from "../constants/blockchain";
-import { getDeploy } from "../utils/contract-utils";
 import { numberOfNFTsOfPubCLvalue } from "./userInfo";
 
 

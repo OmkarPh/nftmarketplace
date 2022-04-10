@@ -9,7 +9,7 @@ export default function Home() {
   // console.log(data2);
   
   return (
-    <div>
+    <div className="px-3">
       <br/>
       <h2>
         Home

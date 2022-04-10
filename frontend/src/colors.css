@@ -1,9 +1,11 @@
 :root {
   /* Default css variables (DARK) for intellisense purpose */
   --textColor: #ffffff;
+  --textColorSecondary: #bec7c8;
   --textFocused: rgb(202, 202, 202);
-  --background: #141313;
   --togglerColor: #434343;
+  --background: #141313;
+  --backgroundSecondary: #191c18;
   --backgroundWide: #202225;
   --backgroundGradientStart: #202225;
   --backgroundGradientEnd: #151530;

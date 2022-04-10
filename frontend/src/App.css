@@ -1,12 +1,12 @@
 .App {
   color: var(--textColor);
   background-color: var(--backgroundWide);
-  background-image: linear-gradient(165deg, var(--backgroundGradientStart) 0%, var(--backgroundGradientEnd) 80%);
+  background-image: linear-gradient(165deg, var(--backgroundGradientEnd) 0%, var(--backgroundGradientStart) 80%);
   min-height: 100vh;
 }
-.App * {
+/* .App * {
   color: var(--textColor);
-}
+} */
 
 
 .App-logo {

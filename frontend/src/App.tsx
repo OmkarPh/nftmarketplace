@@ -6,7 +6,6 @@ import { ThemeProvider as MuiThemeProviderAPI, createTheme } from "@material-ui/
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { SnackbarProvider } from 'notistack';
 import { fetchNftContractDetails } from './api/contractInfo';
-import { HexToCLPublicKey } from './utils/contract-utils';
 
 import Home from './pages/home';
 
@@ -21,6 +20,7 @@ import './App.css';
 import './core.css';
 import './colors.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Dash from './pages/dash';
 
 const queryClient = new QueryClient()
 
@@ -76,7 +76,7 @@ function App() {
     logSeparator();
     
     // Valid, produced by USER_KEYS.publicKey.toHex()
-    const PubHex = '014219513d52632aebf946786e20895c886293043ece013bfbe30381f284c561ac';
+    // const PubHex = '014219513d52632aebf946786e20895c886293043ece013bfbe30381f284c561ac';
     // const pubCL = HexToCLPublicKey(PubHex);
 
     // const numOfNFTs = await numberOfNFTsOwned(pubCL);
@@ -102,13 +102,12 @@ function App() {
             <MuiThemeProvider>
               <BrowserRouter>
                 <Navbar />
-                <div className="px-3">
                   <Switch>
                     <Route exact path="/" component={Home} />
                     <Route exact path="/mint" component={Mint} />
+                    <Route exact path="/dashboard" component={Dash} />
                     <Redirect to="/" />
                   </Switch>
-                </div>
               </BrowserRouter>
             </MuiThemeProvider>
           </ThemeProvider>
