@@ -8,11 +8,11 @@ export async function isIdOccupied(id: string): Promise<boolean>{
     owner = await cep47.getOwnerOf(id);
     if(owner){
       // console.log("owner of", id, "is", owner);
-      console.log("ID ", id, "is occupied");
+      // console.log("ID ", id, "is occupied");
       return true;
     }
   }catch(err){
-    console.log("ID ", id, "is unoccupied");
+    // console.log("ID ", id, "is unoccupied");
     return false
   }
   return owner ? true : false;

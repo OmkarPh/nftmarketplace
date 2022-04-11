@@ -18,11 +18,11 @@
 }
 
 .dropinput {
-  min-height: 350px;
-  max-height: 440px;
+  min-height: 330px;
+  max-height: 550px;
   /* background: linear-gradient(0deg, #F5F5FF, #F5F5FF), #EEEEEE; */
   border-radius: 8px;
-  height: 100%;
+  height: 85%;
   margin-top: 9px;
   /* margin-bottom: 15px; */
   padding-top: 15px;
@@ -90,4 +90,9 @@
   pointer-events: none;
   font-weight: 600;
   white-space: pre;
+}
+
+.refInputs {
+  max-height: 400px;
+  overflow-y: scroll;
 }

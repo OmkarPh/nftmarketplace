@@ -15,7 +15,7 @@ const NFTList = (props: INFTListProps) => {
           <NFTCard nft={nft} key={nft.id} />
         ))
       }
-      {
+      {/* {
         props.nfts.map(nft => (
           <NFTCard nft={nft} key={nft.id} />
         ))
@@ -29,7 +29,7 @@ const NFTList = (props: INFTListProps) => {
         props.nfts.map(nft => (
           <NFTCard nft={nft} key={nft.id} />
         ))
-      }
+      } */}
     </div>
   )
 }

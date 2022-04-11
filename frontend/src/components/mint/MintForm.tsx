@@ -1,8 +1,11 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Box, Button, Checkbox } from '@mui/material';
 import { CLPublicKey } from 'casper-js-sdk';
 import { useSnackbar } from 'notistack';
+
+import AddIcon from '@mui/icons-material/Add';
+
 
 import { mint, NFTReference } from '../../api/mint';
 import { numberOfNFTsOwned } from '../../api/userInfo';
@@ -17,23 +20,36 @@ import { getDeployDetails } from '../../api/universal';
 import { Dialog } from '@material-ui/core';
 import MintStepper, { MintingStages } from './mintSteps';
 import { useCustomTheme } from '../../contexts/ThemeContext';
+import { uploadImg } from '../../api/imageCDN';
 
 interface AccNFTData {
   numOfNFTs: number,
 }
 
+interface MintInputs {
+  about: string,
+  id: number,
+  title: string,
+  directImgURL: boolean,
+}
+
+
 const MintForm = () => {
-  const { entityInfo, logout, refreshAuth } = useAuth();
+  const { entityInfo, refreshAuth } = useAuth();
   const [accData, setAccData] = useState<AccNFTData | null>(null);
   const { enqueueSnackbar } = useSnackbar();
   const { themeVariables } = useCustomTheme();
 
   const [validID, setValidID] = useState(false);
   const [uploadedImageURL, setUploadedImage] = useState<string | null>(null);
-  const [mintInputs, setMintInputs] = useState({
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [uploadingToCloud, setUploadingToCloud] = useState(false);
+  const refs = useRef<HTMLDivElement>(null);
+
+  const [refInputs, setRefInputs] = useState<NFTReference[]>([]);
+  const [mintInputs, setMintInputs] = useState<MintInputs>({
     about: "",
     id: 0,
-    references: [],
     title: "",
     directImgURL: false,
   });
@@ -46,7 +62,6 @@ const MintForm = () => {
       setMintInputs({
         about: "",
         id: await generateUniqueID(),
-        references: [],
         title: "",
         directImgURL: false,
       });
@@ -74,13 +89,32 @@ const MintForm = () => {
     setMintInputs({...mintInputs, directImgURL: directURL});
     setUploadedImage(null);
   }
-  function handleImageChange(event: any) {
+  function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
     if (!event.target || !event.target.files || !(event.target instanceof HTMLInputElement))
       return;
     setUploadedImage(URL.createObjectURL(event.target.files[0]));
+    setUploadedFile(event.target.files[0]);
   }
 
-  async function mintNewNFT(){
+  function handleRefChange(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, refIdx: number, isKey?: boolean){
+    if(!event.target) return;
+    if(isKey)
+      refInputs[refIdx].key = event.target.value;
+    else
+      refInputs[refIdx].value = event.target.value;
+    setRefInputs([...refInputs]);
+  }
+  function addRef(){
+    refInputs.push({ key: "", value: "" });
+    setRefInputs([...refInputs]);
+    if(refs.current){
+      const lastRef = refs.current.lastChild as any;
+      if(lastRef && lastRef.scrollIntoView)
+        lastRef.scrollIntoView();
+    }
+  }
+
+  async function processMint(){
     if(!uploadedImageURL){
       return enqueueSnackbar("Please upload image or enter direct URL", { 
         variant: 'error',
@@ -90,12 +124,42 @@ const MintForm = () => {
       return enqueueSnackbar("Please enter an id that is not already occupied", {variant: 'error'});
     }
 
+    let cloudURL = uploadedImageURL;
+    if(!mintInputs.directImgURL && uploadedFile){
+      console.log("Img", uploadedFile);
+      console.log("Img url", uploadedImageURL);
+      setUploadingToCloud(true);
+      try{
+        cloudURL = await uploadImg(uploadedFile);
+      }catch(err){
+        console.log(err);
+        enqueueSnackbar("Image couldn't be uploaded to cloud CDN !", { variant: 'error' });
+        setUploadingToCloud(false);
+        return;
+      }
+      enqueueSnackbar("Image uploaded to cloud CDN successfuly !", { variant: 'success' });
+      setUploadingToCloud(false);
+    }
+    mintNewNFT(cloudURL);
+  }
+
+  async function mintNewNFT(imgURL: string){
+    if(!uploadedImageURL){
+      return enqueueSnackbar("Please upload image or enter direct URL", { 
+        variant: 'error',
+      });
+    }
+
     if(entityInfo.publicKey){
       console.log("Your pub key: ", entityInfo.publicKey);
 
       setMintStage(MintingStages.STARTED);
       
       let mintDeployHash;
+
+      const filteredRefs = refInputs.filter(ref => !(ref.key === "" && ref.value === ""));
+      console.log(filteredRefs);
+  
       try{
         mintDeployHash = await mint(
           CLPublicKey.fromHex(entityInfo.publicKey),
@@ -103,18 +167,11 @@ const MintForm = () => {
             id: mintInputs.id,
             title: mintInputs.title,
             about: mintInputs.about,
-            url: uploadedImageURL,
-            references: [
-              new NFTReference("my nft collection", "https://opensea.com/OmkarPh"),
-              new NFTReference("my gh", "https://github.com/OmkarPh"),
-            ]
+            url: imgURL,
+            references: refInputs.filter(ref => !(ref.key === "" && ref.value === ""))
           }
         )
       }catch(err: any){
-        console.log(err);
-        console.log(err.message)
-        console.log(err.message.includes('User Cancelled'));
-        
         if(err.message.includes('User Cancelled')){
           setErrStage(MintingStages.STARTED);
         }
@@ -133,7 +190,6 @@ const MintForm = () => {
       setMintInputs({
         about: "",
         id: 0,
-        references: [],
         title: "",
         directImgURL: false,
       });
@@ -149,7 +205,6 @@ const MintForm = () => {
       setMintStage(MintingStages.DEFAULT);
       setErrStage(MintingStages.DEFAULT);
     }
-    
   }
 
   return (
@@ -226,8 +281,14 @@ const MintForm = () => {
                 </div>
               </div>
             }
-
           <br/>
+
+          <div className='d-flex justify-content-center' style={{ width: "90%"}}>
+            <CoreButton onClick={processMint} size='large'>
+              Mint NFT
+            </CoreButton>
+          </div>
+
           </Box>
           <Box gridColumn="span 6">
             <h3>
@@ -237,14 +298,12 @@ const MintForm = () => {
             <CoreTextField
               value={mintInputs.title}
               onChange={e => setMintInputs({ ...mintInputs, title: e.target.value })}
-              id="outlined"
               label="Title" 
               variant="outlined" /><br/><br/>
             <CoreTextField
               value={mintInputs.id}
               onChange={onIDChanged}
               type="number"
-              id="outlined-basic"
               label="ID"
               helperText="Unique ID for your NFT"
               variant="outlined" />
@@ -287,7 +346,6 @@ const MintForm = () => {
                   className='w-100'
                   value={uploadedImageURL}
                   onChange={e => setUploadedImage(e.target.value)}
-                  id="outlined"
                   fullWidth
                   label="Image URL"
                   variant="outlined" />
@@ -298,23 +356,51 @@ const MintForm = () => {
             <CoreTextField
               value={mintInputs.about}
               onChange={e => setMintInputs({ ...mintInputs, about: e.target.value })}
-              id="outlined"
               fullWidth
               multiline
               maxRows={3}
               label="Description" 
-              variant="outlined" />
+              variant="outlined" /><br/><br/>
+            <hr/>
+            <div>
+              <h4>
+                References
+              </h4><br/>
+              <div className='refInputs' ref={refs}>
+              {
+                refInputs.map((ref, idx) => (
+                  <div className='my-2' style={{ borderBottom: "1 px solid var(--textColor)" }}>
+                    <span className='w-100'>
+                      {`#${idx+1} Ref`}
+                    </span><br/>
+                    <div className='my-2'>
+                    <CoreTextField
+                      value={ref.key}
+                      onChange={e => handleRefChange(e, idx, true)}
+                      label={`Key`}
+                      sx={{ maxWidth: "45%" }}
+                      variant="outlined" />
+                    <CoreTextField
+                      value={ref.value}
+                      onChange={e => handleRefChange(e, idx, false)}
+                      label={`Value`}
+                      sx={{ maxWidth: "45%", marginLeft: "20px"}}
+                      variant="outlined" /><br/><br/>
+                    </div>
+                  </div>
+                ))
+              }
+              </div>
+              <CoreButton
+                onClick={addRef}
+                aria-label="Add reference">
+                <AddIcon /> Add reference
+              </CoreButton>
+            </div>
           </Box>
         </Box>
       </Box>
       <br/><br/>
-
-      <CoreButton onClick={logout}>
-        Disconnect
-      </CoreButton>
-      <CoreButton onClick={mintNewNFT}>
-        Mint 1st NFT
-      </CoreButton>
 
       <Dialog
         open={mintStage !== MintingStages.DEFAULT}
@@ -324,6 +410,13 @@ const MintForm = () => {
         aria-labelledby="customized-dialog-title"
       >
         <MintStepper currentStep={mintStage} errorStep={errStage} />
+      </Dialog>
+
+      <Dialog open={uploadingToCloud}>
+        <div className="p-4">
+          Uploading image to CDN &nbsp;
+          <i className="fa fa-solid fa-spinner fa-spin"></i>
+        </div>
       </Dialog>
       <br/><br/><br/>
     </div>

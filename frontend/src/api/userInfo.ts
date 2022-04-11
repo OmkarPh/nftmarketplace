@@ -1,7 +1,9 @@
 import { CLPublicKey } from "casper-js-sdk";
 
 import { cep47 } from "../lib/cep47";
+import { INFT } from "../pages/dash";
 import { HexToCLPublicKey } from "../utils/contract-utils";
+import { parseNFT } from "../utils/parsers";
 
 
 export async function numberOfNFTsOfPubCLvalue(publicKeyCLValue: CLPublicKey): Promise<number>{
@@ -18,6 +20,7 @@ export async function numberOfNFTsOfPubCLvalue(publicKeyCLValue: CLPublicKey): P
     if(err.message.includes('Failed to find base key at path')){
       console.log("Account is empty yet");
     } else {
+      console.log(num);
       console.log("Unexpected err when getting nft count for account", publicKeyCLValue);
     }
   }
@@ -26,8 +29,17 @@ export async function numberOfNFTsOfPubCLvalue(publicKeyCLValue: CLPublicKey): P
 export async function numberOfNFTsOwned(publicKeyHex: string): Promise<number>{
   return await numberOfNFTsOfPubCLvalue(HexToCLPublicKey(publicKeyHex));
 }
-export async function getNFTsOwned(publicKeyCLValue: CLPublicKey){
-  // const nft1_metadata = await cep4
+export async function getNFTsOwned(publicKeyHex: string): Promise<INFT[]>{
+  const publicKeyCLValue = HexToCLPublicKey(publicKeyHex);
+  const numOfNFTs = await numberOfNFTsOfPubCLvalue(publicKeyCLValue);
+  
+  const nfts: INFT[] = [];
+  for(let idx=0; idx<numOfNFTs; idx++){
+    const nftID = await cep47.getTokenByIndex(publicKeyCLValue, String(idx));
+    const rawNFT = await cep47.getTokenMeta(nftID);
+    nfts.push(parseNFT(rawNFT, nftID));
+  }
+  return nfts;
 }
 
 export async function temp(publicKeyCLValue: CLPublicKey){

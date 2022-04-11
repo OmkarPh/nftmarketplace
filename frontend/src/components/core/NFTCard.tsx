@@ -35,25 +35,21 @@ const NFTCard = (props: INFTCardProps) => {
   const [favorited, setFavorited] = React.useState(Math.random() < 0.5);
 
 
-  const favoriteNFT = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+  const favoriteNFT = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     favorite(props.nft)
     setFavorited(true)
     e.stopPropagation();
   };
-  const unFavoriteNFT = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+  const unFavoriteNFT = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     unFavorite(props.nft)
     setFavorited(false)
     e.stopPropagation();
   };
-  const shareNFT = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+  const shareNFT = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     enqueueSnackbar("Shared your nft", { variant: 'success' });
     e.stopPropagation();
   };
-  const openInNewTab = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
-    enqueueSnackbar("Open your nft", { variant: 'success' });
-    e.stopPropagation();
-  };
-
+  
   const toggleModalExpansion = () => {
     setExpanded(!expanded);
   };
@@ -75,9 +71,11 @@ const NFTCard = (props: INFTCardProps) => {
           </Avatar>
         }
         action={
-          <IconButton aria-label="open NFT in new tab" style={{color: themeVariables.textColor}}>
-            <OpenInNewIcon onClick={openInNewTab} />
-          </IconButton>
+          <a href={'/nft/' + id} target="_blank" rel="noreferrer" onClick={e=>e.stopPropagation()}>
+            <IconButton aria-label="open NFT in new tab" style={{color: themeVariables.textColor}}>
+              <OpenInNewIcon />
+            </IconButton>
+          </a>
         }
         sx={{
           color: themeVariables.textColor
@@ -101,15 +99,18 @@ const NFTCard = (props: INFTCardProps) => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites" style={{color: 'red'}}>
+        <IconButton
+          aria-label={favorited ? "Remove from favorites" : "Add to favorites"}
+          style={{color: 'red'}}
+          onClick={favorited ? unFavoriteNFT : favoriteNFT}>
           {
             favorited ?
-            <UnFavoriteIcon sx={{color: 'red !important'}} onClick={unFavoriteNFT} /> :
-            <FavoriteIcon sx={{color: 'red !important'}} onClick={favoriteNFT} />
+            <UnFavoriteIcon sx={{color: 'red !important'}} /> :
+            <FavoriteIcon sx={{color: 'red !important'}}  />
           }
         </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon style={{color: themeVariables.textColor}} onClick={shareNFT} />
+        <IconButton aria-label="share" onClick={shareNFT}>
+          <ShareIcon style={{color: themeVariables.textColor}} />
         </IconButton>
       </CardActions>
     </Card>

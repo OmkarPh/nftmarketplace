@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -20,6 +20,7 @@ import ThemeToggle from './ThemeToggle';
 
 import "./navbar.css";
 import CSPRlogo from '../../images/cspr.png';
+import OpenOceanLogo from '../../images/openocean.png';
 
 const pages = [
   {
@@ -47,9 +48,9 @@ const ResponsiveAppBar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const settings: INavEntity[] = [
-    {
-      title: "Profile"
-    },
+    // {
+    //   title: "Profile"
+    // },
     {
       title: "Dashboard",
       link: "/dashboard"
@@ -85,13 +86,21 @@ const ResponsiveAppBar = () => {
     <AppBar position="static" className='navbarcontainer'>
       <Container maxWidth="xl">
         <Toolbar disableGutters style={{color: themeVariables.textColor}}>
+          <Link to="/">
+            <img src={OpenOceanLogo} alt="Open ocean logo" style={{width: '40px'}}/>
+          </Link>
           <Typography
             variant="h6"
             noWrap
             component="div"
-            sx={{ mr: 2, display: { xs: 'none', md: 'flex' }, color: themeVariables.textColor }}
+            className="mx-3"
+            sx={{ 
+              mr: '40px !important',
+              display: { xs: 'none', md: 'flex' },
+              color: themeVariables.textColor
+            }}
           >
-            LOGO
+            Open Ocean
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -137,7 +146,7 @@ const ResponsiveAppBar = () => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
           >
-            LOGO
+            Open Ocean
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (

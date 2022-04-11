@@ -26,11 +26,24 @@ export async function mint(publicKeyCLValue: CLPublicKey, mintOptions: IMintOpti
   console.log('...... No. of NFTs in your account before mint: ', oldBalance);
   
   const metas = [new Map()];
-  mintOptions.references.forEach(ref => metas[0].set(ref.key, ref.value));
+  mintOptions.references.forEach(ref => {
+    if(metas[0].has(ref.key)){
+      metas[0].set(ref.key+"_", ref.value);
+    }else{
+      metas[0].set(ref.key, ref.value)
+    }
+  });
   metas[0].set('title', mintOptions.title);
   metas[0].set('about', mintOptions.about);
   metas[0].set('url', mintOptions.url);
 
+  console.log("Final nft info:", {
+    publicKeyCLValue,
+    id: [String(mintOptions.id)],
+    metas,
+    payments: PAYMENT_AMOUNTS.MINT_ONE_PAYMENT_AMOUNT
+  });
+  
   const mintDeploy = await cep47.mint(
     publicKeyCLValue,
     [String(mintOptions.id)],

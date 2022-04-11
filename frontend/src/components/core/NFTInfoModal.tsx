@@ -8,13 +8,17 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteIcon from '@mui/icons-material/FavoriteBorder';
+import UnFavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import Linkify from 'react-linkify';
 
 import { INFT } from '../../pages/dash';
 import { useCustomTheme } from '../../contexts/ThemeContext';
 import { Box } from '@mui/material';
+import { favorite, unFavorite } from '../../api/miscFeatures';
+import { useSnackbar } from 'notistack';
+import LinkifyDecoratorFactory from './LinkifyDecorator';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => {
   const { themeVariables } = useCustomTheme();
@@ -67,11 +71,6 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   );
 };
 
-const LinkifyDecorator = (href: string, text: string) => (
-  <a href={href} target="_blank" rel="noreferrer">
-    {text}
-  </a>
-);
 
 interface INFTInfoModalProps {
   open: boolean,
@@ -81,10 +80,29 @@ interface INFTInfoModalProps {
 export function NFTInfoModal(props: INFTInfoModalProps) {
   const {open, onClose, nft } = props;
   const { themeVariables } = useCustomTheme();
+  const [favorited, setFavorited] = React.useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+
+  
+  const shareNFT = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    enqueueSnackbar("Shared your nft", { variant: 'success' });
+    e.stopPropagation();
+  };
 
   if(!nft)
-    return <></>
-
+  return <></>
+  
+  const favoriteNFT = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    favorite(nft)
+    setFavorited(true)
+    e.stopPropagation();
+  };
+  const unFavoriteNFT = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    unFavorite(nft)
+    setFavorited(false)
+    e.stopPropagation();
+  };
+  
   const { title, about, id, url, references } = nft;
   return (
     <BootstrapDialog
@@ -140,16 +158,16 @@ export function NFTInfoModal(props: INFTInfoModalProps) {
             <div style={{ maxHeight: "500px", overflowY: "auto" }}>
               {
                 references.map(ref => (
-                  <>
+                  <div key={ref.key}>
                     <Typography gutterBottom>
                       { ref.key }
                     </Typography>
                     <Typography gutterBottom paragraph style={{marginBottom: "2rem"}}>
-                      <Linkify componentDecorator={LinkifyDecorator}>
+                      <Linkify componentDecorator={LinkifyDecoratorFactory(true)}>
                         { ref.value }
                       </Linkify>
                     </Typography>
-                  </>
+                  </div>
                 ))
               }
             </div>
@@ -157,11 +175,17 @@ export function NFTInfoModal(props: INFTInfoModalProps) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon style={{color: 'red'}} />
-          {/* <i className="fa fa-solid fa-heart"></i> */}
+        <IconButton
+          aria-label={favorited ? "Remove from favorites" : "Add to favorites"}
+          style={{color: 'red'}}
+          onClick={favorited ? unFavoriteNFT : favoriteNFT}>
+          {
+            favorited ?
+            <UnFavoriteIcon sx={{color: 'red !important'}} /> :
+            <FavoriteIcon sx={{color: 'red !important'}}  />
+          }
         </IconButton>
-        <IconButton aria-label="share">
+        <IconButton aria-label="share" onClick={shareNFT}>
           <ShareIcon style={{color: themeVariables.textColor}} />
         </IconButton>
       </DialogActions>

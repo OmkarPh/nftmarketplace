@@ -27,7 +27,7 @@ const inputStyles = (themeVariables: any, isNumeric?: boolean) => {
 
 
 export const CoreTextField = (props: TextFieldProps) => {
-  const { className, ...otherProps } = props;
+  const { className, sx, ...otherProps } = props;
   const { themeVariables } = useCustomTheme();
   return (
     <TextField
@@ -35,7 +35,7 @@ export const CoreTextField = (props: TextFieldProps) => {
       className={className}
       InputLabelProps={inputStyles(themeVariables)}
       inputProps={inputStyles(themeVariables)}
-      sx={inputCustomStyles(themeVariables)}
+      sx={{...sx, ...inputCustomStyles(themeVariables)}}
     />
   );
 }

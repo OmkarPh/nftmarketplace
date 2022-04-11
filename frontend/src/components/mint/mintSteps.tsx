@@ -55,7 +55,6 @@ const MintStepper = (props: IMintStepperProps) => {
               error?: boolean;
             } = {};
             
-            console.log("err step", currStage.stage, props.errorStep);
             if(
               props.errorStep !== currStage.stage &&
               MintStagesInfo.findIndex(stage => stage.stage === props.currentStep) >= currIdx
@@ -71,8 +70,6 @@ const MintStepper = (props: IMintStepperProps) => {
               )
             }
 
-            console.log(currStage.stage);
-            
             return (
               <Step key={currStage.stage}>
                 <StepLabel {...labelProps}>

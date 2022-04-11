@@ -21,6 +21,7 @@ import './core.css';
 import './colors.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Dash from './pages/dash';
+import NFT from './pages/nft';
 
 const queryClient = new QueryClient()
 
@@ -106,6 +107,7 @@ function App() {
                     <Route exact path="/" component={Home} />
                     <Route exact path="/mint" component={Mint} />
                     <Route exact path="/dashboard" component={Dash} />
+                    <Route exact path="/nft/:id" component={NFT} />
                     <Redirect to="/" />
                   </Switch>
               </BrowserRouter>

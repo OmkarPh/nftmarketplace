@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { Signer } from "casper-js-sdk";
+import { cep47 } from '../lib/cep47';
 
 interface IEntityInfo {
   publicKey: string | null,
