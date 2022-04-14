@@ -1,4 +1,5 @@
 import { Close, Edit, Save, Sell, Send } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 import { Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material'
 import { useSnackbar } from 'notistack';
 import { ChangeEvent, useRef, useState } from 'react';
@@ -17,6 +18,7 @@ import LinkifyDecoratorFactory from '../core/LinkifyDecorator';
 import AddIcon from '@mui/icons-material/Add';
 
 import { PAYMENT_AMOUNTS } from '../../constants/paymentAmounts';
+import { trimAccHash } from '../../utils/ux';
 
 interface INFTContainerProps {
   nft: INFT;
@@ -214,9 +216,15 @@ const NftContainer = (props: INFTContainerProps) => {
             color={themeVariables.textColorSecondary}>
             #  { id } 
           </Typography>
-          {/* <Typography>
-            Owned by { owner! }
-          </Typography> */}
+          {
+            owner &&
+            <Typography>
+              Owned by &nbsp;
+              <Link to={'/profiles/' + owner}>
+                { trimAccHash(owner) }
+              </Link>
+            </Typography>
+          }
 
           {
             editingMode ?

@@ -44,10 +44,11 @@ export async function numberOfNFTsOwned(publicKeyHex: string): Promise<number>{
 export async function getNFTsOwnedByAccHash(accHash: string): Promise<INFT[]>{
   const numOfNFTs = await numberOfNFTsOfAccHash(accHash);
   const nfts: INFT[] = [];
+  
   for(let idx=0; idx<numOfNFTs; idx++){
-    // const nftID = await cep47.getTokenByIndex(publicKeyCLValue, String(idx));
-    // const rawNFT = await cep47.getTokenMeta(nftID);
-    // nfts.push(parseNFT(rawNFT, nftID));
+    const nftID = await cep47.getTokenByIndexNAccHash(accHash, String(idx));
+    const rawNFT = await cep47.getTokenMeta(nftID);
+    nfts.push(parseNFT(rawNFT, nftID));
   }
   return nfts;
 }
@@ -62,23 +63,3 @@ export async function getNFTsOwned(publicKeyHex: string): Promise<INFT[]>{
   }
   return nfts;
 }
-
-export async function temp(publicKeyCLValue: CLPublicKey){
-  const nft1_metadata = await cep47.getTokenMeta("1");
-  console.log('NFT 1 metadata: ', nft1_metadata);
-
-  let nft1_owner = await cep47.getOwnerOf("1");
-  console.log('NFT1 owner: \n', nft1_owner);  
-
-  const nft1_index = await cep47.getIndexByToken(publicKeyCLValue, "1");
-  console.log("NFT1 index:", nft1_index);
-
-  let nft1 = await cep47.getTokenByIndex(publicKeyCLValue, nft1_index);
-  console.log(`NFT token a t index ${nft1_index} is`, nft1);
-}
-
-// const indexByToken5 = await cep47.getIndexByToken(KEYS.publicKey, "5");
-// console.log('...... index of token five: ', indexByToken5);
-
-// const tokenByIndex5 = await cep47.getTokenByIndex(KEYS.publicKey, indexByToken5);
-// console.log('...... token five id: ', tokenByIndex5);

@@ -12,3 +12,7 @@ export function trimString(str: string, maxLength?: number){
   const ellipsis = endIdx < str.length ? "..." : "";
   return str.substring(0, endIdx) + ellipsis;
 }
+
+export function trimAccHash(str: string){
+  return str.substring(0, 25) + "........." + str.substring(55);
+}

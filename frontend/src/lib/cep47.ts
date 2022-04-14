@@ -8,7 +8,8 @@ import {
   Keys,
   CLKeyParameters,
   CLValueBuilder,
-  CLValueParsers 
+  CLValueParsers ,
+  CLAccountHash,
 } from "casper-js-sdk";
 import { concat } from "@ethersproject/bytes";
 import blake from "blakejs";
@@ -83,7 +84,7 @@ export const CEP47EventParser = (
   return null;
 };
 
-const keyAndValueToHex = (key: CLValue, value: CLValue) => {
+export const keyAndValueToHex = (key: CLValue, value: CLValue) => {
   const aBytes = CLValueParsers.toBytes(key).unwrap();
   const bBytes = CLValueParsers.toBytes(value).unwrap();
 
@@ -91,6 +92,15 @@ const keyAndValueToHex = (key: CLValue, value: CLValue) => {
   const hex = Buffer.from(blaked).toString('hex');
 
   return hex;
+}
+
+export const accHashStrToCLValue = (accHashStr: string) => {
+  const json = {
+    bytes: accHashStr.slice(13),
+    cl_type: { ByteArray: 32 }
+  };
+  const data = CLValueParsers.fromJSON(json).unwrap().data
+  return new CLAccountHash(data);
 }
 
 class CEP47Client {
@@ -191,17 +201,17 @@ class CEP47Client {
     const result = await this.contractClient.queryContractDictionary('owned_tokens_by_index', hex);
 
     const maybeValue = result.value().unwrap();
-
     return maybeValue.value().toString();
   }
 
   public async getTokenByIndexNAccHash(ownerAccHash: string, index: string) {
-    const hex = keyAndValueToHex(CLValueBuilder.string(ownerAccHash), CLValueBuilder.u256(index));
+    const hex = keyAndValueToHex(
+      CLValueBuilder.key(accHashStrToCLValue(ownerAccHash)),
+      CLValueBuilder.u256(index)
+    );
     const result = await this.contractClient.queryContractDictionary('owned_tokens_by_index', hex);
-    console.log(result);
-    
+   
     const maybeValue = result.value().unwrap();
-
     return maybeValue.value().toString();
   }
 
