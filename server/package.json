@@ -1,0 +1,19 @@
+{
+  "name": "nftmarketplace-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
+  },
+  "author": "Omkar Phansopkar <omkarphansopkar@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "connect-slashes": "^1.4.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.3"
+  }
+}

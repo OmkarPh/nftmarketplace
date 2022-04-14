@@ -1,11 +1,11 @@
 import { Button, ButtonProps } from '@mui/material';
 
 const CoreButton = (props: ButtonProps) => {
-  const { children, className, ...otherProps } = props;
+  const { children, className, style, ...otherProps } = props;
   return (
     <Button
       {...otherProps}
-      style={{ margin: "2px" }}
+      style={{  margin: "2px", ...style, }}
       className={(className ? className : "") + 'corebtn'}
       variant={props.variant ? props.variant : "contained"}>
       {children}

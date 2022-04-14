@@ -21,6 +21,8 @@ import ThemeToggle from './ThemeToggle';
 import "./navbar.css";
 import CSPRlogo from '../../images/cspr.png';
 import OpenOceanLogo from '../../images/openocean.png';
+import { copyTextToClipboard } from '../../utils/globals';
+import CoreButton from '../core/CoreButton';
 
 const pages = [
   {
@@ -46,6 +48,14 @@ const ResponsiveAppBar = () => {
 
 	const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [copied, setCopied] = React.useState(false);
+  function copyPubKey(){
+    copyTextToClipboard(entityInfo.publicKey!);
+    setCopied(true);
+    setTimeout(()=>{
+      setCopied(false);
+    }, 5000);
+  }
 
   const settings: INavEntity[] = [
     // {
@@ -94,12 +104,14 @@ const ResponsiveAppBar = () => {
             noWrap
             component="div"
             className="mx-3"
+            onClick={()=>history.push('/')}
             sx={{ 
+              cursor: 'pointer',
               mr: '40px !important',
               display: { xs: 'none', md: 'flex' },
+              textDecoration: 'none',
               color: themeVariables.textColor
-            }}
-          >
+            }}>
             Open Ocean
           </Typography>
 
@@ -167,8 +179,17 @@ const ResponsiveAppBar = () => {
 					{
 						isLoggedIn && entityInfo ?
 						<div className="m-2">
-							{ entityInfo.publicKey?.slice(0, 3) } ... 
-							{ entityInfo.publicKey?.slice(entityInfo.publicKey.length - 2) }
+              <Tooltip title={copied ? "Copied !" : "Click to copy"}>
+                <CoreButton
+                  variant='text'
+                  aria-label='Click to copy'
+                  style={{ color: themeVariables.textColor + ' !important'}}
+                  onClick={copyPubKey}>
+                  { entityInfo.publicKey?.slice(0, 3) } ... 
+                  { entityInfo.publicKey?.slice(entityInfo.publicKey.length - 2) }
+                </CoreButton>
+              </Tooltip>
+
 						</div> :
 						<Tooltip title="Connect signer" className='mx-4'>
 							<IconButton aria-label="Connect to casper signer" onClick={login}>

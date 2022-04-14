@@ -1,7 +1,7 @@
 import { INFT } from "../../pages/dash"
-import NFTCard from "../core/NFTCard"
+import NFTCard from "./NFTCard"
 
-import "./dash.css";
+import "./core.css";
 
 interface INFTListProps{
   nfts: INFT[]

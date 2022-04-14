@@ -32,7 +32,7 @@ const NFTCard = (props: INFTCardProps) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const [expanded, setExpanded] = React.useState(false);
-  const [favorited, setFavorited] = React.useState(Math.random() < 0.5);
+  const [favorited, setFavorited] = React.useState(Math.random() < 0.2);
 
 
   const favoriteNFT = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -49,7 +49,7 @@ const NFTCard = (props: INFTCardProps) => {
     enqueueSnackbar("Shared your nft", { variant: 'success' });
     e.stopPropagation();
   };
-  
+
   const toggleModalExpansion = () => {
     setExpanded(!expanded);
   };

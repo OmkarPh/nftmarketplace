@@ -1,5 +1,7 @@
 import { cep47 } from "../lib/cep47";
+import { INFT } from "../pages/dash";
 import { getRandomNumberBetween } from "../utils/calculations";
+import { parseNFT } from "../utils/parsers";
 
 export async function isIdOccupied(id: string): Promise<boolean>{
   id = String(Number(id));
@@ -28,8 +30,9 @@ export async function generateUniqueID(): Promise<number>{
   return randID;
 }
 
-export async function getNFTDetails(tokenID: string){
-  const nft1_metadata = await cep47.getTokenMeta(tokenID);
+export async function getNFT(tokenID: string): Promise<INFT>{
+  const metadata = await cep47.getTokenMeta(tokenID);
+  const owner = await cep47.getOwnerOf(tokenID);
   // console.log(`NFT ${tokenID} metadata: `, nft1_metadata);
-  return nft1_metadata;
+  return parseNFT(metadata, tokenID, owner);
 }

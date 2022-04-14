@@ -1,7 +1,7 @@
 import { CasperClient, CLPublicKey, Keys, CasperServiceByJsonRPC } from "casper-js-sdk";
 
 export function HexToCLPublicKey(publicKey: string){
-  console.log("Parsing public key string: ", publicKey);
+  // console.log("Parsing public key string: ", publicKey);
   return CLPublicKey.fromHex(publicKey);
 }
 

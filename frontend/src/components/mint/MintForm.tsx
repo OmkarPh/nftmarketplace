@@ -21,6 +21,7 @@ import { Dialog } from '@material-ui/core';
 import MintStepper, { MintingStages } from './mintSteps';
 import { useCustomTheme } from '../../contexts/ThemeContext';
 import { uploadImg } from '../../api/imageCDN';
+import { cacheNFT } from '../../api/explorer';
 
 interface AccNFTData {
   numOfNFTs: number,
@@ -159,7 +160,8 @@ const MintForm = () => {
 
       const filteredRefs = refInputs.filter(ref => !(ref.key === "" && ref.value === ""));
       console.log(filteredRefs);
-  
+      const newNftID = mintInputs.id;
+
       try{
         mintDeployHash = await mint(
           CLPublicKey.fromHex(entityInfo.publicKey),
@@ -197,6 +199,11 @@ const MintForm = () => {
 
       const newBalance = await numberOfNFTsOwned(entityInfo.publicKey);
       console.log('...... No. of NFTs in your account: ', newBalance);
+
+      // Cache new nft ID on server
+      cacheNFT(String(newNftID))
+        .then(console.log)
+        .catch(console.log)
     }
   }
 
@@ -283,7 +290,7 @@ const MintForm = () => {
             }
           <br/>
 
-          <div className='d-flex justify-content-center' style={{ width: "90%"}}>
+          <div className='d-flex justify-content-center my-4' style={{ width: "90%"}}>
             <CoreButton onClick={processMint} size='large'>
               Mint NFT
             </CoreButton>
@@ -318,18 +325,6 @@ const MintForm = () => {
                 </>
                 }
               </h3>
-            {/* <CoreButton disabled={checkingID} onClick={e => setCheckingID(!checkingID)}> */}
-              {/* {
-                checkingID ?
-                <>
-                  Checking availability ... 
-                  <i className="mx-2 fas fa-spinner fa-pulse"></i>
-                </> :
-                <> 
-                  Check availability
-                </>
-              } */}
-            {/* </CoreButton> */}
             <br/><br/>
 
             Already hosted image, enter direct url ?

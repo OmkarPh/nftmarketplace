@@ -1,0 +1,1 @@
+export const UTILITY_SERVER_URL = process.env.REACT_APP_UTILITY_SERVER || "http://localhost:5000";

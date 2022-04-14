@@ -154,6 +154,18 @@ class CEP47Client {
     return maybeValue.value().toString();
   }
 
+  public async balanceOfAccHash(accHash: string){
+    if(!accHash.includes('account-hash-')){
+      throw new Error("Invalid account hash !");
+    }
+    const result = await this.contractClient
+      .queryContractDictionary('balances', accHash.slice(13));
+
+    const maybeValue = result.value().unwrap();
+
+    return maybeValue.value().toString();
+  }
+
   public async getOwnerOf(tokenId: string) {
     const result = await this.contractClient
       .queryContractDictionary('owners', tokenId);
@@ -178,6 +190,16 @@ class CEP47Client {
     const hex = keyAndValueToHex(CLValueBuilder.key(owner), CLValueBuilder.u256(index));
     const result = await this.contractClient.queryContractDictionary('owned_tokens_by_index', hex);
 
+    const maybeValue = result.value().unwrap();
+
+    return maybeValue.value().toString();
+  }
+
+  public async getTokenByIndexNAccHash(ownerAccHash: string, index: string) {
+    const hex = keyAndValueToHex(CLValueBuilder.string(ownerAccHash), CLValueBuilder.u256(index));
+    const result = await this.contractClient.queryContractDictionary('owned_tokens_by_index', hex);
+    console.log(result);
+    
     const maybeValue = result.value().unwrap();
 
     return maybeValue.value().toString();

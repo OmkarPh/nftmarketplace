@@ -5,7 +5,6 @@ export const LinkifyDecoratorFactory =  (newTab?: boolean) => {
     const anchorProps: React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement> = {
       href
     }
-    console.log("new tab", newTab);
     
     if(newTab){
       anchorProps.target = "_blank";

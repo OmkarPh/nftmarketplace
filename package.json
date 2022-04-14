@@ -9,7 +9,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "setup": "npm install --prefix ./frontend && npm install --prefix ./cors-server && npm install --prefix ./deploy-scripts",
-    "server": "cd cors-server && npm start",
+    "server": "cd server && npm run dev",
+    "cors-server": "cd cors-server && npm start",
+    "install-contract": "cd deploy-scripts && npm run install-contract",
     "frontend": "cd frontend && npm start",
     "build-frontend": "cd frontend && npm run build"
   },

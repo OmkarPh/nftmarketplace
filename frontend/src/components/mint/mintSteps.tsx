@@ -2,7 +2,8 @@ import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-import { Typography } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
+import { Link, Typography } from '@material-ui/core';
 
 
 export enum MintingStages {
@@ -65,7 +66,19 @@ const MintStepper = (props: IMintStepperProps) => {
                   color="textSecondary"
                   style={{ display: "inline-block", width: "100%" }}
                   align='center'>
-                  { currStage.description }
+                  { currStage.description }<br/>
+                  {
+                    currStage.stage === MintingStages.TX_SUCCESS &&
+                    props.currentStep === MintingStages.TX_SUCCESS &&
+                    <>
+                      View your NFTs &nbsp;
+                      <Link
+                        component={RouterLink}
+                        to='/dashboard'>
+                        here 
+                      </Link>
+                    </>
+                  }
                 </Typography>
               )
             }
@@ -79,7 +92,10 @@ const MintStepper = (props: IMintStepperProps) => {
                       { currStage.err }
                     </Typography>
                     : currStage.stage <= props.currentStep ?
-                    <> { currStage.title } </> : 
+                    <> 
+                      { currStage.title }
+                      <br/>
+                    </> : 
                     <> 
                       { currStage.processTitle } &nbsp;
                       <i className="fa fa-solid fa-spinner fa-spin"></i>

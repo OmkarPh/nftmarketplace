@@ -105,6 +105,7 @@ function App() {
                 <Navbar />
                   <Switch>
                     <Route exact path="/" component={Home} />
+                    <Route exact path="/explore" component={Home} />
                     <Route exact path="/mint" component={Mint} />
                     <Route exact path="/dashboard" component={Dash} />
                     <Route exact path="/nft/:id" component={NFT} />

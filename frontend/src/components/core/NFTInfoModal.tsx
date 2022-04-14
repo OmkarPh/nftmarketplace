@@ -19,6 +19,8 @@ import { Box } from '@mui/material';
 import { favorite, unFavorite } from '../../api/miscFeatures';
 import { useSnackbar } from 'notistack';
 import LinkifyDecoratorFactory from './LinkifyDecorator';
+import { OpenInFull } from '@mui/icons-material';
+import { useHistory } from 'react-router-dom';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => {
   const { themeVariables } = useCustomTheme();
@@ -82,7 +84,7 @@ export function NFTInfoModal(props: INFTInfoModalProps) {
   const { themeVariables } = useCustomTheme();
   const [favorited, setFavorited] = React.useState(false);
   const { enqueueSnackbar } = useSnackbar();
-
+  const history = useHistory();
   
   const shareNFT = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     enqueueSnackbar("Shared your nft", { variant: 'success' });
@@ -187,6 +189,13 @@ export function NFTInfoModal(props: INFTInfoModalProps) {
         </IconButton>
         <IconButton aria-label="share" onClick={shareNFT}>
           <ShareIcon style={{color: themeVariables.textColor}} />
+        </IconButton>
+
+        <IconButton
+          onClick={()=>history.push('/nft/' + id)}
+          style={{ color: themeVariables.textColor}}
+          aria-label='Expand'>
+          <OpenInFull />
         </IconButton>
       </DialogActions>
     </BootstrapDialog>
