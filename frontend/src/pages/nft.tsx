@@ -58,7 +58,7 @@ const NFT = () => {
                     <br/><br/>
                   </h3>
                   <h5 style={{ lineHeight: 2 }}>
-                    Manage your NFTs <Link to='/dashboard'>here</Link>
+                    Manage your NFTs <Link to='/profile'>here</Link>
                     <br/>
                     or
                     <br/>

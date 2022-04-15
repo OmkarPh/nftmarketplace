@@ -108,7 +108,7 @@ function App() {
                     <Route exact path="/" component={Home} />
                     <Route exact path="/explore" component={Home} />
                     <Route exact path="/mint" component={Mint} />
-                    <Route exact path="/dashboard" component={Dash} />
+                    <Route exact path="/profile" component={Dash} />
                     <Route exact path="/nft/:id" component={NFT} />
                     <Route exact path="/profiles/:acchash" component={Profile} />
                     <Redirect to="/" />

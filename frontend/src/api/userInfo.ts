@@ -48,18 +48,19 @@ export async function getNFTsOwnedByAccHash(accHash: string): Promise<INFT[]>{
   for(let idx=0; idx<numOfNFTs; idx++){
     const nftID = await cep47.getTokenByIndexNAccHash(accHash, String(idx));
     const rawNFT = await cep47.getTokenMeta(nftID);
-    nfts.push(parseNFT(rawNFT, nftID));
+    nfts.push(parseNFT(rawNFT, nftID, accHash));
   }
   return nfts;
 }
 export async function getNFTsOwned(publicKeyHex: string): Promise<INFT[]>{
   const publicKeyCLValue = HexToCLPublicKey(publicKeyHex);
   const numOfNFTs = await numberOfNFTsOfPubCLvalue(publicKeyCLValue);
+  const ownerAccHash = publicKeyCLValue.toAccountHashStr();
   const nfts: INFT[] = [];
   for(let idx=0; idx<numOfNFTs; idx++){
     const nftID = await cep47.getTokenByIndex(publicKeyCLValue, String(idx));
     const rawNFT = await cep47.getTokenMeta(nftID);
-    nfts.push(parseNFT(rawNFT, nftID));
+    nfts.push(parseNFT(rawNFT, nftID, ownerAccHash));
   }
   return nfts;
 }

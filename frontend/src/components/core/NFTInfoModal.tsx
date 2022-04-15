@@ -20,7 +20,7 @@ import { favorite, unFavorite } from '../../api/miscFeatures';
 import { useSnackbar } from 'notistack';
 import LinkifyDecoratorFactory from './LinkifyDecorator';
 import { OpenInFull } from '@mui/icons-material';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => {
   const { themeVariables } = useCustomTheme();
@@ -105,7 +105,7 @@ export function NFTInfoModal(props: INFTInfoModalProps) {
     e.stopPropagation();
   };
   
-  const { title, about, id, url, references } = nft;
+  const { title, about, id, owner, url, references } = nft;
   return (
     <BootstrapDialog
       fullWidth
@@ -152,7 +152,11 @@ export function NFTInfoModal(props: INFTInfoModalProps) {
             </Typography>
             <Typography gutterBottom className='my-1'>
               { about }
-            </Typography><br/><br/>
+            </Typography>
+            <br/>
+            <a href={'/profiles/' + owner} target='_blank' rel='noreferrer'>
+                Owner
+            </a><br/><br/>
             <h5>
               References
             </h5>

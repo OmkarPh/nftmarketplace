@@ -385,8 +385,7 @@ class CEP47Client {
     id: string,
     meta: Map<string, string>,
     paymentAmount: string,
-    deploySender: CLPublicKey,
-    keys?: Keys.AsymmetricKey[]
+    deploySender: CLPublicKey
   ) {
     const runtimeArgs = RuntimeArgs.fromMap({
       token_id: CLValueBuilder.u256(id),
@@ -398,8 +397,7 @@ class CEP47Client {
       runtimeArgs,
       deploySender,
       this.networkName,
-      paymentAmount,
-      keys
+      paymentAmount
     );
   }
 }

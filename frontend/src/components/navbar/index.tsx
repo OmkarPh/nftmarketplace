@@ -58,12 +58,9 @@ const ResponsiveAppBar = () => {
   }
 
   const settings: INavEntity[] = [
-    // {
-    //   title: "Profile"
-    // },
     {
-      title: "Dashboard",
-      link: "/dashboard"
+      title: "Profile",
+      link: "/profile"
     },
     {
       title: "Logout",

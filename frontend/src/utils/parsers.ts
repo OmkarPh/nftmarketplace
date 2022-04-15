@@ -1,7 +1,7 @@
 import { NFTReference } from "../api/mint";
 import { INFT } from "../pages/dash";
 
-export function parseNFT(rawData: Map<string, string>, id: string, owner?: string): INFT{
+export function parseNFT(rawData: Map<string, string>, id: string, owner: string): INFT{
   const title = rawData.get('title');
   const about = rawData.get('about');
   const url = rawData.get('url');

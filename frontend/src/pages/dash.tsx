@@ -12,7 +12,7 @@ import { THEMES } from "../constants/THEMES";
 import { Link } from "react-router-dom";
 
 export interface INFT {
-  owner?: string,
+  owner: string,
   title: string,
   about: string,
   url: string,
@@ -24,7 +24,7 @@ export interface INFT {
 const Dash = () => {
   const { isLoggedIn, entityInfo } = useAuth();
   const { theme } = useCustomTheme();
-  const [nftList, setNftList] = useState<null | any>(null);
+  const [nftList, setNftList] = useState<INFT[] | null>(null);
 
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const Dash = () => {
     return <PromptLogin />
 
   return (
-    <div>
+    <div className="p-4">
       {
         ! nftList ? 
         <h4>Loading ...</h4>
@@ -79,7 +79,16 @@ const Dash = () => {
               </Link>
             </h5>
         </div>
-        : <NFTList nfts={nftList} />
+        : 
+        <div className="">
+          <h4>
+            Your account hash: { nftList[0].owner }
+          </h4>
+          <h5>
+            Total NFTs owned: { nftList.length }
+          </h5>
+          <NFTList nfts={nftList} />
+        </div>
       }
     </div>
   )

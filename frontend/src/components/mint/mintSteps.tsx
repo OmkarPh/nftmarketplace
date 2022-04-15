@@ -74,7 +74,7 @@ const MintStepper = (props: IMintStepperProps) => {
                       View your NFTs &nbsp;
                       <Link
                         component={RouterLink}
-                        to='/dashboard'>
+                        to='/profile'>
                         here 
                       </Link>
                     </>
