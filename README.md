@@ -9,6 +9,8 @@
 #### Team - Solo
 - [Omkar Phansopkar](https://github.com/OmkarPh)
 
+  Gitcoin - [@omkarph](https://gitcoin.co/omkarph)
+
 ## Tech Stack
 - Blockchain:
   
