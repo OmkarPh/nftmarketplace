@@ -5,6 +5,8 @@
   Built with ❤️ for READY PLAYER CASPER Hackathon
 </div>
 
+#### PS: Secured 2nd rank in NFT marketplace bounty ✌️
+
 
 #### Team - Solo
 - [Omkar Phansopkar](https://github.com/OmkarPh)
